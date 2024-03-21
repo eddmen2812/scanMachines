@@ -57,6 +57,11 @@ if is_valid_full_ip "$ip_address"; then
     if [ -n "$ttl" ]; then
         os_name=$(python3 -c "import re; ttl = $ttl; print('Linux' if ttl <= 64 else 'Windows' if ttl <= 128 else 'No Localizado')")
         echo "Host $ip_address : $os_name"
+        if [[ "$os_name" == "Linux" ]]; then
+            ((linux_count++))
+        elif [[ "$os_name" == "Windows" ]]; then
+            ((windows_count++))
+        fi
     else
         echo "Host $ip_address : No disponible"
     fi
@@ -76,6 +81,11 @@ else
         if [ -n "$ttl" ]; then
             os_name=$(python3 -c "import re; ttl = $ttl; print('Linux' if ttl <= 64 else 'Windows' if ttl <= 128 else 'No localizado')")
             echo "Host $ip : $os_name"
+            if [[ "$os_name" == "Linux" ]]; then
+                ((linux_count++))
+            elif [[ "$os_name" == "Windows" ]]; then
+                ((windows_count++))
+            fi
             found=true
         fi
     done
@@ -84,3 +94,8 @@ else
         echo "Host $ip_address : No disponible"
     fi
 fi
+
+echo ""
+echo "Máquinas activas (Linux): $linux_count"
+echo "Máquinas activas (Windows): $windows_count"
+echo "Total: $((linux_count + windows_count))"
